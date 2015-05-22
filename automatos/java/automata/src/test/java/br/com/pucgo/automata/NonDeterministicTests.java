@@ -14,111 +14,10 @@ import static org.junit.Assert.assertTrue;
  */
 public class NonDeterministicTests {
 
-    private void shouldAcceptDFALanguage(String word) {
-        Automata automata = AutomataFactory.createNonDeterministicAutomata();
 
-        automata.getSymbols().add('0');
-        automata.getSymbols().add('1');
-
-        State q0 = automata.addState("Q0");
-        State q1 = automata.addState("Q1", true);
-
-        automata.setStart(q0);
-
-        automata.addTransition(q0, '0', q0);
-        automata.addTransition(q0, '1', q1);
-        automata.addTransition(q1, '0', q0);
-        automata.addTransition(q1, '1', q1);
-
-        assertTrue(automata.accept(word));
-    }
-
-    @Test
-    public void test1() {
-        shouldAcceptDFALanguage("01");
-    }
-
-    @Test
-    public void test2() {
-        shouldAcceptDFALanguage("01");
-    }
-
-    @Test
-    public void test3() {
-        shouldAcceptDFALanguage("011");
-    }
-
-    @Test
-    public void test4() {
-        shouldAcceptDFALanguage("0101");
-    }
-
-    @Test
-    public void test5() {
-        shouldAcceptDFALanguage("1");
-    }
-
-    @Test
-    public void test6() {
-        shouldAcceptDFALanguage("11");
-    }
-
-    @Test
-    public void test7() {
-        shouldAcceptDFALanguage("1101");
-    }
-
-    private void shouldNotAcceptDFALanguage(String word) {
-        Automata automata = AutomataFactory.createNonDeterministicAutomata();
-
-        automata.getSymbols().add('0');
-        automata.getSymbols().add('1');
-
-        State q0 = automata.addState("Q0");
-        State q1 = automata.addState("Q1", true);
-
-        automata.setStart(q0);
-
-        automata.addTransition(q0, '0', q0);
-        automata.addTransition(q0, '1', q1);
-        automata.addTransition(q1, '0', q0);
-        automata.addTransition(q1, '1', q1);
-
-        assertFalse(automata.accept(word));
-    }
-
-    @Test
-    public void test8() {
-        shouldNotAcceptDFALanguage("0");
-    }
-
-    @Test
-    public void test9() {
-        shouldNotAcceptDFALanguage("010");
-    }
-
-    @Test
-    public void test10() {
-        shouldNotAcceptDFALanguage("01010");
-    }
-
-    @Test
-    public void test11() {
-        shouldNotAcceptDFALanguage("10");
-    }
-
-    @Test
-    public void test12() {
-        shouldNotAcceptDFALanguage("00");
-    }
-
-    @Test
-    public void test13() {
-        shouldNotAcceptDFALanguage("11010");
-    }
 
     private void shouldAcceptNFALanguage(String word) {
-        Automata automata = AutomataFactory.createNonDeterministicAutomata();
+        NFA automata = AutomataFactory.createNFA();
 
         automata.getSymbols().addAll(Arrays.asList('a', 'b', 'c'));
 
@@ -149,17 +48,17 @@ public class NonDeterministicTests {
     }
 
     @Test
-    public void test14() {
+    public void test1() {
         shouldAcceptNFALanguage("abc");
     }
 
     @Test
-    public void test15() {
+    public void test2() {
         shouldAcceptNFALanguage("def");
     }
 
     private void shouldNotAcceptNFALanguage(String word) {
-        Automata automata = AutomataFactory.createNonDeterministicAutomata();
+        NFA automata = AutomataFactory.createNFA();
 
         automata.getSymbols().addAll(Arrays.asList('a', 'b', 'c', 'd', 'e', 'f'));
 
@@ -190,42 +89,42 @@ public class NonDeterministicTests {
     }
 
     @Test
-    public void test16() {
+    public void test3() {
         shouldNotAcceptNFALanguage("a");
     }
 
     @Test
-    public void test17() {
+    public void test4() {
         shouldNotAcceptNFALanguage("ab");
     }
 
     @Test
-    public void test18() {
+    public void test5() {
         shouldNotAcceptNFALanguage("abcd");
     }
 
     @Test
-    public void test19() {
+    public void test6() {
         shouldNotAcceptNFALanguage("d");
     }
 
     @Test
-    public void test20() {
+    public void test7() {
         shouldNotAcceptNFALanguage("de");
     }
 
     @Test
-    public void test21() {
+    public void test8() {
         shouldNotAcceptNFALanguage("defa");
     }
 
     @Test
-    public void test22() {
+    public void test9() {
         shouldNotAcceptNFALanguage("abcd");
     }
 
     private void shouldAcceptNFALanguage1(String word) {
-        Automata automata = AutomataFactory.createNonDeterministicAutomata();
+        Automata automata = AutomataFactory.createNFA();
 
         automata.getSymbols().addAll(Arrays.asList('a', 'b', 'c'));
 

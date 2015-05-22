@@ -1,7 +1,5 @@
 package br.com.pucgo.automata;
 
-import java.util.ArrayList;
-
 /**
  * Representa um estado de um autômato.
  *
@@ -10,8 +8,6 @@ import java.util.ArrayList;
 public class State {
     private String name;
     private boolean isFinal;
-    private ArrayList<State> adjacentes;
-    private ArrayList<Character> symbol_transition;
 
     /**
      * Inicializa uma instância desta classe.
@@ -20,8 +16,6 @@ public class State {
      */
     public State(String name) {
         this.name = name;
-        adjacentes = new ArrayList<State>();
-        symbol_transition = new ArrayList<Character>();
     }
 
     /**
@@ -57,19 +51,5 @@ public class State {
     @Override
     public String toString() {
         return String.format("State: %s (final = %s)", name, isFinal ? "true" : "false");
-    }
-
-    public void setTransition(Character symbol, State state)
-    {
-        adjacentes.add(state);
-        symbol_transition.add(symbol);
-    }
-
-    public void trantionsSymbol( ArrayList<State> adjacente, Character symbol)
-    {
-        int j = symbol_transition.size();
-        for(int i=0; i<j; i++)
-            if(symbol_transition.get(i) == symbol)
-                adjacente.add(this.adjacentes.get(i));
     }
 }

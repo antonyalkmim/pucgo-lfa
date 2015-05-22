@@ -1,5 +1,8 @@
 package br.com.pucgo.automata;
 
+import br.com.pucgo.automata.impl.DFAImpl;
+import br.com.pucgo.automata.impl.NFAImpl;
+
 /**
  * A fábrica de autômatos.
  *
@@ -8,12 +11,21 @@ package br.com.pucgo.automata;
 public final class AutomataFactory {
 
     /**
-     * Cria um novo autômato NFA.
+     * Cria um novo DFA.
      *
      * @return a instância do autômato.
      */
-    public static Automata createNonDeterministicAutomata() {
-        return new NFA(); // substitua pela sua implementação
+    public static DFA createDFA() {
+        return new DFAImpl();
+    }
+
+    /**
+     * Cria um novo NFA.
+     *
+     * @return
+     */
+    public static NFA createNFA() {
+        return new NFAImpl();
     }
 
 }
