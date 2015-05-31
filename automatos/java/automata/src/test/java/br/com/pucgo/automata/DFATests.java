@@ -2,6 +2,9 @@ package br.com.pucgo.automata;
 
 import org.junit.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -11,6 +14,7 @@ import static org.junit.Assert.assertTrue;
 public class DFATests {
 
     private void shouldAcceptDFALanguage(String word) {
+
         DFA automata = AutomataFactory.createDFA();
 
         automata.getSymbols().add('0');
@@ -28,6 +32,7 @@ public class DFATests {
 
         assertTrue(automata.accept(word));
     }
+
 
     @Test
     public void test1() {

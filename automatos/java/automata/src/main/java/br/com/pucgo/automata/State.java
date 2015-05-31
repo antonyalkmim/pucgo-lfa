@@ -6,6 +6,7 @@ package br.com.pucgo.automata;
  * Created by danfma on 22/11/14.
  */
 public class State {
+
     private String name;
     private boolean isFinal;
 
@@ -52,4 +53,5 @@ public class State {
     public String toString() {
         return String.format("State: %s (final = %s)", name, isFinal ? "true" : "false");
     }
+
 }
