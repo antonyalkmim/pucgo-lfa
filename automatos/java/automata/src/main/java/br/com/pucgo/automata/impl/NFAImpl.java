@@ -47,8 +47,9 @@ public class NFAImpl implements NFA {
     }
 
     public void addTransition(State sourceState, char symbol, State... targetStates) {
+        int index = states.indexOf(sourceState);
         for(State s:targetStates){
-            states.get(states.indexOf(sourceState)).addTransition(symbol, (MState) s);
+            states.get(index).addTransition(symbol, (MState) s);
         }
     }
 
@@ -60,67 +61,27 @@ public class NFAImpl implements NFA {
     public DFA toDFA() {
         DFA dfa = AutomataFactory.createDFA();
         dfa.getSymbols().addAll(this.symbols);
-        dfa.setStart(this.startState);
 
-        MState stateVAZIO = (MState) dfa.addState("$VAZIO");
+
+        //adicionar somente quando nao houver transicoes para um determinado simbolo
+        MState stateVAZIO = new MState("$VAZIO");
+
         MState currState = (MState) dfa.addState(this.startState.getName(), this.startState.isFinal());
 
-        boolean converter = true;
-        while(converter){
+        for(Character symbol: symbols){
 
-            for(Character symbol: symbols){
-                if(!currState.getTransitions().containsKey(symbol)){
-                    dfa.addTransition(currState, symbol, stateVAZIO);
-                }else{
-                    List<MState> targetStates = currState.getTransitions().get(symbol);
-                    if(targetStates.size() == 1){
-                        dfa.addTransition(currState, symbol, targetStates.get(0));
-                    }else{
-                        MState state = this.stateFromStates(targetStates);
-
-                        state = (MState) dfa.addState(state.getName(), state.isFinal());
-                        dfa.addTransition(currState, symbol, state);
-                    }
-                }
+            if(currState.getTransitions().containsKey(symbol)){
+                List<MState> targets = currState.getTransitions().get(symbol);
+                
             }
-
-
         }
 
+
+
+
+        dfa.setStart(this.startState);
         return dfa;
     }
 
-
-
-
-    /**
-     * Cria um estado a partir de uma lista de estados
-     * @param states
-     * @return MState
-     */
-    private MState stateFromStates(List<MState> states){
-        String name = "";
-        boolean isFinal = false;
-
-        for(MState s:states){
-            name += s.getName();
-            if(!isFinal)
-                isFinal = s.isFinal();
-        }
-        MState state = new MState(name, isFinal);
-
-        //TODO: implementar transicoes de state
-
-        return state;
-    }
-
-
-    private MState existStateName(String stateName, List<MState> states){
-        for(MState s:states){
-            if(s.getName().equals(stateName))
-                return s;
-        }
-        return null;
-    }
 
 }
