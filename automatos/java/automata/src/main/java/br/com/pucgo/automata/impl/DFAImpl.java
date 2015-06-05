@@ -52,8 +52,7 @@ public class DFAImpl implements DFA {
     }
 
     public void addTransition(State sourceState, char symbol, State... targetStates) {
-        MState state = states.get(states.indexOf(sourceState));
-        state.getTransitions().put(symbol, (MState) targetStates[0]);
+        states.get(states.indexOf(sourceState)).addTransition(symbol, (MState) targetStates[0]);
     }
 
     public boolean accept(String word) {
@@ -66,35 +65,10 @@ public class DFAImpl implements DFA {
             if(!currState.getTransitions().containsKey(w))
                 return false;
 
-            currState = currState.getTransitions().get(w);
-
+            currState = currState.getTransitions().get(w).get(0);
         }
 
         return currState.isFinal();
-    }
-
-
-
-    private class MState extends State{
-
-        private Map<Character, MState> transitions = new HashMap<Character, MState>();
-
-        public MState(String name) {
-            super(name);
-        }
-
-        public MState(String name, boolean isFinal) {
-            super(name, isFinal);
-        }
-
-        public void addTransition(Character symbol, MState state){
-            this.transitions.put(symbol, state);
-        }
-
-        public Map<Character, MState> getTransitions(){
-            return this.transitions;
-        }
-
     }
 
 }

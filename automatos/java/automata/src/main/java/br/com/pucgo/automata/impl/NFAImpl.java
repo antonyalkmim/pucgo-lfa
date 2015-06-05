@@ -10,40 +10,57 @@ import java.util.*;
 
 public class NFAImpl implements NFA {
 
+    //Lista de estados
+    List<MState> states = new ArrayList<MState>();
 
+    //Simbolos do Alfabeto
+    List<Character> symbols = new ArrayList<Character>();
+
+    private MState startState = null;
+
+    //Epsilon
     public static char Epsilon = '&';
+
 
     public char getEpsilon() {
         return NFAImpl.Epsilon;
-    } 
+    }
 
     public List<Character> getSymbols() {
-        return null;
+        return symbols;
     }
 
     public State addState(String stateName) {
-        return null;
+        MState state = new MState(stateName, false);
+        this.states.add(state);
+        return state;
     }
 
     public State addState(String stateName, boolean isFinal) {
-        return null;
+        MState state = new MState(stateName, isFinal);
+        this.states.add(state);
+        return state;
     }
 
     public void setStart(State state) {
+        this.startState = (MState) state;
+    }
 
+    public void addTransition(State sourceState, char symbol, State... targetStates) {
+        states.get(states.indexOf(sourceState)).addTransition(symbol, (MState) targetStates[0]);
+    }
+
+    public boolean accept(String word) {
+        return this.toDFA().accept(word);
     }
 
 
     public DFA toDFA() {
-        return null;
+        DFA dfa = AutomataFactory.createDFA();
+
+        //TODO: implementar conversao para DFA
+
+        return dfa;
     }
 
-
-    public void addTransition(State sourceState, char symbol, State... targetStates) {
-
-    }
-
-    public boolean accept(String word) {
-        return false;
-    }
 }
