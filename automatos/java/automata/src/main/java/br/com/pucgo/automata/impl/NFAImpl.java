@@ -15,7 +15,7 @@ public class NFAImpl implements NFA {
 
     public char getEpsilon() {
         return NFAImpl.Epsilon;
-    }
+    } 
 
     public List<Character> getSymbols() {
         return null;
