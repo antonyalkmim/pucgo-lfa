@@ -10,10 +10,10 @@ public class DFAImpl implements DFA {
 
 
     //Lista de estados
-    List<MState> states = new ArrayList<MState>();
+    public List<MState> states = new ArrayList<MState>();
 
     //Simbolos do Alfabeto
-    List<Character> symbols = new ArrayList<Character>();
+    public List<Character> symbols = new ArrayList<Character>();
 
     private MState startState = null;
 
@@ -36,12 +36,22 @@ public class DFAImpl implements DFA {
     }
 
     public State addState(String stateName) {
+        MState s = existStateName(stateName, this.states);
+        if(s != null){
+            return s;
+        }
+
         MState state = new MState(stateName, false);
         this.states.add(state);
         return state;
     }
 
     public State addState(String stateName, boolean isFinal) {
+        MState s = existStateName(stateName, this.states);
+        if(s != null){
+            return s;
+        }
+
         MState state = new MState(stateName, isFinal);
         this.states.add(state);
         return state;
@@ -69,6 +79,16 @@ public class DFAImpl implements DFA {
         }
 
         return currState.isFinal();
+    }
+
+
+
+    private MState existStateName(String stateName, List<MState> states){
+        for(MState s:states){
+            if(s.getName().equals(stateName))
+                return s;
+        }
+        return null;
     }
 
 }
