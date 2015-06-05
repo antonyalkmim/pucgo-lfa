@@ -47,7 +47,9 @@ public class NFAImpl implements NFA {
     }
 
     public void addTransition(State sourceState, char symbol, State... targetStates) {
-        states.get(states.indexOf(sourceState)).addTransition(symbol, (MState) targetStates[0]);
+        for(State s:targetStates){
+            states.get(states.indexOf(sourceState)).addTransition(symbol, (MState) s);
+        }
     }
 
     public boolean accept(String word) {
