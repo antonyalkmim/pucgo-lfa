@@ -5,6 +5,7 @@ import br.com.pucgo.automata.DFA;
 import br.com.pucgo.automata.NFA;
 import br.com.pucgo.automata.State;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 
@@ -20,7 +21,6 @@ public class NFAImpl implements NFA {
 
     //Epsilon
     public static char Epsilon = '&';
-
 
     public char getEpsilon() {
         return NFAImpl.Epsilon;
@@ -63,25 +63,81 @@ public class NFAImpl implements NFA {
         dfa.getSymbols().addAll(this.symbols);
 
 
-        //adicionar somente quando nao houver transicoes para um determinado simbolo
-        MState stateVAZIO = new MState("$VAZIO");
+        //Criar target vazio e quando ler qualquer simbolo apondar para ele mesmo
+        MState targetVazio = (MState) dfa.addState("$vazio");
+        for(Character symbol: symbols) {
+            dfa.addTransition(targetVazio, symbol, targetVazio);
+        }
 
-        MState currState = (MState) dfa.addState(this.startState.getName(), this.startState.isFinal());
 
-        for(Character symbol: symbols){
 
-            if(currState.getTransitions().containsKey(symbol)){
+        for(MState currState: states) {
+            for (Character symbol : symbols) {
+                MState state = (MState) dfa.addState(currState.getName(), currState.isFinal());
+
+                if(currState.getName().equals(this.startState.getName()))
+                    dfa.setStart(state);
+
                 List<MState> targets = currState.getTransitions().get(symbol);
-                
+                if (targets.size() > 1) {
+                    MState newState = stateFromStates(targets, dfa);
+                    state.addTransition(symbol, newState);
+                }else if(targets.size() == 1){
+                    state.addTransition(symbol, targets.get(0));
+                }else{
+                    state.addTransition(symbol, targetVazio);
+                }
+            }
+        }
+
+
+        return dfa;
+    }
+
+    private MState stateFromStates(List<MState> states, DFA dfa){
+        String newStateName = "";
+        boolean newStateIsFinal = false;
+
+        for(MState state: states){
+            newStateName += state.getName();
+            newStateIsFinal = newStateIsFinal ? newStateIsFinal : state.isFinal();
+        }
+        MState newState = (MState) dfa.addState(newStateName, newStateIsFinal);
+
+        for(Character symbol: dfa.getSymbols()) {
+            for(MState state: states){
+                if(state.getTransitions().containsKey(symbol)){
+                    List<MState> tmpTargets = state.getTransitions().get(symbol);
+                    for(MState t:tmpTargets) {
+                        newState.addTransition(symbol, t);
+                    }
+                }
             }
         }
 
 
 
-
-        dfa.setStart(this.startState);
-        return dfa;
+        return newState;
     }
 
+    private MState verificaState(List<MState> states, List<MState> targetStates){
+
+        for(MState state: states){
+
+        }
+
+        return null;
+    }
+
+    private MState existStateName(String stateName){
+        for(MState state: states){
+            if(state.getName().equals(stateName)){
+                return state;
+            }
+        }
+        return null;
+    }
 
 }
+
+

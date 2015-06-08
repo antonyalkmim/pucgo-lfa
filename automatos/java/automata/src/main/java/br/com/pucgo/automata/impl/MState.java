@@ -28,7 +28,9 @@ public class MState extends State {
 
         if(transitions.containsKey(symbol)) {
             targetStates = transitions.get(symbol);
-            targetStates.add(state);
+            if(targetStates.indexOf(state) == -1) { //nao pode repetir mesmo estado
+                targetStates.add(state);
+            }
         }else{
             targetStates = new ArrayList<MState>();
             targetStates.add(state);

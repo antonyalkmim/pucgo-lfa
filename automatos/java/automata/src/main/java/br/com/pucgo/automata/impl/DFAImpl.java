@@ -36,13 +36,22 @@ public class DFAImpl implements DFA {
     }
 
     public State addState(String stateName) {
-        MState state = new MState(stateName, false);
+        MState state = existStateName(stateName);
+        if(state != null){
+            return state;
+        }
+        state = new MState(stateName, false);
         this.states.add(state);
         return state;
     }
 
     public State addState(String stateName, boolean isFinal) {
-        MState state = new MState(stateName, isFinal);
+        MState state = existStateName(stateName);
+        if(state != null){
+            return state;
+        }
+
+        state = new MState(stateName, isFinal);
         this.states.add(state);
         return state;
     }
@@ -72,5 +81,17 @@ public class DFAImpl implements DFA {
     }
 
 
+    private MState existStateName(String stateName){
+        for(MState state: states){
+            if(state.getName().equals(stateName)){
+                return state;
+            }
+        }
+        return null;
+    }
+
+    public List<MState> getStates(){
+        return this.states;
+    }
 
 }

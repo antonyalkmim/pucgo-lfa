@@ -50,20 +50,31 @@ public class NonDeterministicTests {
 
     private void shouldAcceptNFALanguage2(String word) {
         NFA automata = AutomataFactory.createNFA();
-
+        /*
         automata.getSymbols().addAll(Arrays.asList('0', '1'));
 
         State s0 = automata.addState("S0");
         State s1 = automata.addState("S1");
         State s2 = automata.addState("S2", true);
 
-
-
         automata.setStart(s0);
 
         automata.addTransition(s0, '0', s0);
         automata.addTransition(s0, '1', s0, s1);
         automata.addTransition(s1, '0', s2);
+        */
+
+        automata.getSymbols().addAll(Arrays.asList('0', '1'));
+
+        State s0 = automata.addState("S0");
+        State s1 = automata.addState("S1", true);
+
+        automata.setStart(s0);
+
+        automata.addTransition(s0, '0', s0, s1);
+        automata.addTransition(s0, '1', s1);
+        automata.addTransition(s1, '0', s0);
+        automata.addTransition(s1, '1', s0);
 
 
         assertTrue(automata.accept(word));
@@ -71,7 +82,7 @@ public class NonDeterministicTests {
 
     @Test
     public void test1() {
-        shouldAcceptNFALanguage2("010");
+        shouldAcceptNFALanguage2("01");
     }
     /*
     @Test
