@@ -94,24 +94,29 @@ public class NFAImpl implements NFA {
                 }*/
 
                 //Caso for estado inicial
-                if(currState.getName().equals(this.startState.getName()))
+                if (currState.getName().equals(this.startState.getName()))
                     dfa.setStart(currState);
 
                 List<MState> targets = currState.getTransitions().get(symbol);
-                if (targets.size() > 1) {
+                if(targets == null){
+                    if(!statesBKP.contains(targetVazio)){
+                        statesBKP.add(targetVazio);
+                    }
+
+                    currState.addTransition(symbol, targetVazio);
+                }else if (targets.size() > 1) {
                     MState newState = stateFromStates(targets, statesBKP);
                     if(currState.getTransitions().containsKey(symbol))
                         currState.getTransitions().get(symbol).clear();
 
                     currState.addTransition(symbol, newState);
                 }else if(targets.size() == 1){
-                    currState.addTransition(symbol, targets.get(0));
-                }else{
-                    if(!statesBKP.contains(targetVazio)){
-                        statesBKP.add(targetVazio);
+
+                    if(currState.getTransitions().get(symbol) != null && currState.getTransitions().get(symbol).get(0) == targetVazio){
+                        currState.getTransitions().get(symbol).clear();
                     }
 
-                    currState.addTransition(symbol, targetVazio);
+                    currState.addTransition(symbol, targets.get(0));
                 }
             }
         }

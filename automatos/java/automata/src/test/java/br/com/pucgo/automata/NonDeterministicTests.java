@@ -15,9 +15,9 @@ import static org.junit.Assert.assertTrue;
 public class NonDeterministicTests {
 
 
-
+    /*
     private void shouldAcceptNFALanguage(String word) {
-        /*NFA automata = AutomataFactory.createNFA();
+        NFA automata = AutomataFactory.createNFA();
 
         automata.getSymbols().addAll(Arrays.asList('a', 'b', 'c'));
 
@@ -44,12 +44,16 @@ public class NonDeterministicTests {
         automata.addTransition(s6, 'e', s7);
         automata.addTransition(s7, 'f', s8);
 
-        assertTrue(automata.accept(word));*/
-        assertTrue(true);
+        assertTrue(automata.accept(word));
     }
+    */
+
+
+
 
     private void shouldAcceptNFALanguage2(String word) {
         NFA automata = AutomataFactory.createNFA();
+
         /*
         automata.getSymbols().addAll(Arrays.asList('0', '1'));
 
@@ -82,7 +86,7 @@ public class NonDeterministicTests {
 
     @Test
     public void test1() {
-        shouldAcceptNFALanguage2("1");
+        shouldAcceptNFALanguage2("010");
     }
     /*
     @Test
@@ -200,5 +204,5 @@ public class NonDeterministicTests {
     public void test27() {
         shouldAcceptNFALanguage1("abc");
     }
-*/
+        */
 }
