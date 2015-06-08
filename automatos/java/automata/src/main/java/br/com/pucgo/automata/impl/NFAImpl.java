@@ -72,30 +72,8 @@ public class NFAImpl implements NFA {
         for(Character symbol: symbols) {
             targetVazio.addTransition(symbol, targetVazio);
         }
-        statesBKP.add(targetVazio);
-
-        /*
-        for(MState currState: statesBKP){
-            for(Character symbol: symbols){
-
-                List<MState> targets = currState.getTransitions().get(symbol);
-                MState state = new MState(currState.getName(), currState.isFinal());
-
-                if(targets.size() > 1){
-                    MState compoundTarget = stateFromStates(targets);
-
-                    state.addTransition(symbol, compoundTarget);
-                }else if(targets.size() == 1){
-                    state.addTransition(symbol, targets.get(0));
-                }else{
-                    state.addTransition(symbol, targetVazio);
-                }
-
-            }
-        }*/
 
 
-        //for(MState currState: statesBKP) {
         for(int i=0; i < statesBKP.size(); i++) {
             MState currState = statesBKP.get(i);
 
@@ -113,13 +91,16 @@ public class NFAImpl implements NFA {
                 }else if(targets.size() == 1){
                     currState.addTransition(symbol, targets.get(0));
                 }else{
+                    if(!statesBKP.contains(targetVazio)){
+                        statesBKP.add(targetVazio);
+                    }
+
                     currState.addTransition(symbol, targetVazio);
                 }
             }
         }
 
         //TODO: adicionar os statesBKP na lista de states do DFA
-
         return dfa;
     }
 
