@@ -13,6 +13,8 @@ import java.util.Map;
 
 public class MState extends State {
 
+    private List<MState> compoundState = new ArrayList<MState>();
+
     private Map<Character, List<MState>> transitions = new HashMap<Character, List<MState>>();
 
     public MState(String name) {
@@ -21,6 +23,11 @@ public class MState extends State {
 
     public MState(String name, boolean isFinal) {
         super(name, isFinal);
+    }
+
+    public MState(String name, boolean isFinal, List<MState> compoundState) {
+        super(name, isFinal);
+        this.compoundState.addAll(compoundState);
     }
 
     public void addTransition(Character symbol, MState state){
@@ -41,6 +48,10 @@ public class MState extends State {
 
     public Map<Character, List<MState>> getTransitions(){
         return this.transitions;
+    }
+
+    public List<MState> getCompoundState(){
+        return this.compoundState;
     }
 
 }

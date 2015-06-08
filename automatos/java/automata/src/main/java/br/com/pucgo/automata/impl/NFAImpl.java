@@ -59,42 +59,72 @@ public class NFAImpl implements NFA {
 
 
     public DFA toDFA() {
+
+        List<MState> statesBKP = new ArrayList<MState>();
+        statesBKP.addAll(states);
+
         DFA dfa = AutomataFactory.createDFA();
         dfa.getSymbols().addAll(this.symbols);
 
 
         //Criar target vazio e quando ler qualquer simbolo apondar para ele mesmo
-        MState targetVazio = (MState) dfa.addState("$vazio");
+        MState targetVazio = new MState("$vazio", false);
         for(Character symbol: symbols) {
-            dfa.addTransition(targetVazio, symbol, targetVazio);
+            targetVazio.addTransition(symbol, targetVazio);
         }
+        statesBKP.add(targetVazio);
 
-
-
-        for(MState currState: states) {
-            for (Character symbol : symbols) {
-                MState state = (MState) dfa.addState(currState.getName(), currState.isFinal());
-
-                if(currState.getName().equals(this.startState.getName()))
-                    dfa.setStart(state);
+        /*
+        for(MState currState: statesBKP){
+            for(Character symbol: symbols){
 
                 List<MState> targets = currState.getTransitions().get(symbol);
-                if (targets.size() > 1) {
-                    MState newState = stateFromStates(targets, dfa);
-                    state.addTransition(symbol, newState);
+                MState state = new MState(currState.getName(), currState.isFinal());
+
+                if(targets.size() > 1){
+                    MState compoundTarget = stateFromStates(targets);
+
+                    state.addTransition(symbol, compoundTarget);
                 }else if(targets.size() == 1){
                     state.addTransition(symbol, targets.get(0));
                 }else{
                     state.addTransition(symbol, targetVazio);
                 }
+
+            }
+        }*/
+
+
+        //for(MState currState: statesBKP) {
+        for(int i=0; i < statesBKP.size(); i++) {
+            MState currState = statesBKP.get(i);
+
+            for (Character symbol : symbols) {
+                //MState state = new MState(currState.getName(), currState.isFinal());
+
+                if(currState.getName().equals(this.startState.getName()))
+                    dfa.setStart(currState);
+
+                List<MState> targets = currState.getTransitions().get(symbol);
+                if (targets.size() > 1) {
+                    MState newState = stateFromStates(targets, statesBKP);
+                    currState.getTransitions().get(symbol).clear();
+                    currState.addTransition(symbol, newState);
+                }else if(targets.size() == 1){
+                    currState.addTransition(symbol, targets.get(0));
+                }else{
+                    currState.addTransition(symbol, targetVazio);
+                }
             }
         }
 
+        //TODO: adicionar os statesBKP na lista de states do DFA
 
         return dfa;
     }
 
-    private MState stateFromStates(List<MState> states, DFA dfa){
+
+    private MState stateFromStates(List<MState> states){
         String newStateName = "";
         boolean newStateIsFinal = false;
 
@@ -102,13 +132,29 @@ public class NFAImpl implements NFA {
             newStateName += state.getName();
             newStateIsFinal = newStateIsFinal ? newStateIsFinal : state.isFinal();
         }
-        MState newState = (MState) dfa.addState(newStateName, newStateIsFinal);
 
-        for(Character symbol: dfa.getSymbols()) {
+        return new MState(newStateName, newStateIsFinal, states);
+    }
+
+
+
+
+    private MState stateFromStates(List<MState> states, List<MState> dfaStates){
+        String newStateName = "";
+        boolean newStateIsFinal = false;
+
+        for(MState state: states){
+            newStateName += state.getName();
+            newStateIsFinal = newStateIsFinal ? newStateIsFinal : state.isFinal();
+        }
+
+        MState newState = new MState(newStateName, newStateIsFinal, states);
+
+        for(Character symbol: symbols) {
             for(MState state: states){
                 if(state.getTransitions().containsKey(symbol)){
                     List<MState> tmpTargets = state.getTransitions().get(symbol);
-                    for(MState t:tmpTargets) {
+                    for (MState t : tmpTargets) {
                         newState.addTransition(symbol, t);
                     }
                 }
@@ -116,7 +162,15 @@ public class NFAImpl implements NFA {
         }
 
 
+        for(Character symbol: symbols){
+            if(newState.getTransitions().get(symbol).containsAll(states) && newState.getTransitions().get(symbol).size() == states.size()) {
+                newState.getTransitions().get(symbol).clear();
+                newState.addTransition(symbol, newState);
+            }
+        }
 
+
+        dfaStates.add(newState);
         return newState;
     }
 
