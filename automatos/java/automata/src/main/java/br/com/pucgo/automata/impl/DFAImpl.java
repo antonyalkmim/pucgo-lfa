@@ -90,8 +90,9 @@ public class DFAImpl implements DFA {
         return null;
     }
 
-    public List<MState> getStates(){
-        return this.states;
+    public void addStates(List<MState> s) {
+        this.states.clear();
+        this.states.addAll(s);
     }
 
 }

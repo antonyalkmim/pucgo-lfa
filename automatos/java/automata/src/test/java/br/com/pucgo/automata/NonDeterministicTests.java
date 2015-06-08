@@ -82,7 +82,7 @@ public class NonDeterministicTests {
 
     @Test
     public void test1() {
-        shouldAcceptNFALanguage2("01");
+        shouldAcceptNFALanguage2("1");
     }
     /*
     @Test

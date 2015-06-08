@@ -1,5 +1,7 @@
 package br.com.pucgo.automata;
 
+import br.com.pucgo.automata.impl.MState;
+
 import java.util.List;
 
 /**
@@ -64,5 +66,8 @@ public interface Automata {
      * @return true, se for aceita; caso contrário, false.
      */
     public boolean accept(String word);
+
+
+    public void addStates(List<MState> s);
 
 }

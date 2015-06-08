@@ -57,6 +57,10 @@ public class NFAImpl implements NFA {
         return this.toDFA().accept(word);
     }
 
+    public void addStates(List<MState> s) {
+
+    }
+
 
     public DFA toDFA() {
 
@@ -76,17 +80,29 @@ public class NFAImpl implements NFA {
 
         for(int i=0; i < statesBKP.size(); i++) {
             MState currState = statesBKP.get(i);
+            //MState currState = (MState) dfa.addState(_currState.getName(), _currState.isFinal());
 
             for (Character symbol : symbols) {
-                //MState state = new MState(currState.getName(), currState.isFinal());
+                /*
+                //passa as transicoes de _currState para currState do DFA
+                if(_currState.getCompoundState().size() > 0) {
+                    currState = _currState;
+                }else if(_currState.getTransitions().containsKey(symbol)) {
+                    List<MState> list = _currState.getTransitions().get(symbol);
+                    for(MState s:list)
+                        currState.addTransition(symbol, s);
+                }*/
 
+                //Caso for estado inicial
                 if(currState.getName().equals(this.startState.getName()))
                     dfa.setStart(currState);
 
                 List<MState> targets = currState.getTransitions().get(symbol);
                 if (targets.size() > 1) {
                     MState newState = stateFromStates(targets, statesBKP);
-                    currState.getTransitions().get(symbol).clear();
+                    if(currState.getTransitions().containsKey(symbol))
+                        currState.getTransitions().get(symbol).clear();
+
                     currState.addTransition(symbol, newState);
                 }else if(targets.size() == 1){
                     currState.addTransition(symbol, targets.get(0));
@@ -101,6 +117,7 @@ public class NFAImpl implements NFA {
         }
 
         //TODO: adicionar os statesBKP na lista de states do DFA
+        dfa.addStates(statesBKP);
         return dfa;
     }
 
