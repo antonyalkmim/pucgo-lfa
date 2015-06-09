@@ -15,16 +15,11 @@ public class DFAImpl implements DFA {
     //Simbolos do Alfabeto
     public List<Character> symbols = new ArrayList<Character>();
 
+    //Estado inicial
     private MState startState = null;
 
     //Epsilon
     public static char Epsilon = '&';
-
-    public DFA minimize() {
-        //TODO: implementar algoritmo de minimizacao de DFA
-        return null;
-    }
-
 
     public char getEpsilon() {
         return DFAImpl.Epsilon;
@@ -36,16 +31,11 @@ public class DFAImpl implements DFA {
     }
 
     public State addState(String stateName) {
-        MState state = existStateName(stateName);
-        if(state != null){
-            return state;
-        }
-        state = new MState(stateName, false);
-        this.states.add(state);
-        return state;
+        return this.addState(stateName, false);
     }
 
     public State addState(String stateName, boolean isFinal) {
+        //Caso o estado ja existir apenas o retorna
         MState state = existStateName(stateName);
         if(state != null){
             return state;
@@ -80,7 +70,22 @@ public class DFAImpl implements DFA {
         return currState.isFinal();
     }
 
+    /**
+     * Metodo para obter o DFA em sua forma minimizada com o menos numero de estados e transicoes
+     * @return
+     */
+    public DFA minimize() {
+        //TODO: implementar algoritmo de minimizacao de DFA
+        return null;
+    }
 
+    /**
+     * Verifica se existe algum estado com o mesmo nome na lista de estados
+     * Retorna o estado encontrado e null se o estado nao for encontrado
+     *
+     * @param stateName
+     * @return
+     */
     private MState existStateName(String stateName){
         for(MState state: states){
             if(state.getName().equals(stateName)){
@@ -90,7 +95,10 @@ public class DFAImpl implements DFA {
         return null;
     }
 
-
+    /**
+     * Adiciona nova lista de estado
+     * @param states
+     */
     public void setStates(List<MState> states){
         this.states = states;
     }

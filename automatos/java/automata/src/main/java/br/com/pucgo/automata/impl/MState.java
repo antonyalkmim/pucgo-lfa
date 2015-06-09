@@ -13,8 +13,10 @@ import java.util.Map;
 
 public class MState extends State {
 
+    //Armazena os estados que compoem este estado(Quando for criado a partir de uma lista de estados)
     private List<MState> compoundState = new ArrayList<MState>();
 
+    //Mapa de transicoes. Ex: 'a'=>[s1,s2,s3],'b'=>[...]
     private Map<Character, List<MState>> transitions = new HashMap<Character, List<MState>>();
 
     public MState(String name) {
@@ -25,11 +27,22 @@ public class MState extends State {
         super(name, isFinal);
     }
 
+    /**
+     * Construtor para quando o estado for criado a partir de uma lista de estados
+     * @param name String
+     * @param isFinal boolean
+     * @param compoundState List
+     */
     public MState(String name, boolean isFinal, List<MState> compoundState) {
         super(name, isFinal);
         this.compoundState.addAll(compoundState);
     }
 
+    /**
+     * Adiciona transicao para 'state' quando ler 'symbol'
+     * @param symbol Character
+     * @param state MState
+     */
     public void addTransition(Character symbol, MState state){
         List<MState> targetStates;
 
@@ -46,12 +59,12 @@ public class MState extends State {
 
     }
 
+    /**
+     * Retorna o mapa de transicoes
+     * @return Map
+     */
     public Map<Character, List<MState>> getTransitions(){
         return this.transitions;
-    }
-
-    public List<MState> getCompoundState(){
-        return this.compoundState;
     }
 
 }
