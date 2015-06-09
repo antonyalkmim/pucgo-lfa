@@ -19,10 +19,15 @@ public class NFAImpl implements NFA {
 
     private MState startState = null;
 
+    private MState targetVazio = targetVazioFactory("$vazio");
+
     //Epsilon
     public static char Epsilon = '&';
 
     public char getEpsilon() {
+        if(!this.symbols.contains(NFAImpl.Epsilon)){
+            this.symbols.add(NFAImpl.Epsilon);
+        }
         return NFAImpl.Epsilon;
     }
 
@@ -67,34 +72,20 @@ public class NFAImpl implements NFA {
         dfa.getSymbols().addAll(this.symbols);
 
 
-        //Criar target vazio e quando ler qualquer simbolo apondar para ele mesmo
-        MState targetVazio = new MState("$vazio", false);
-        for(Character symbol: symbols) {
-            targetVazio.addTransition(symbol, targetVazio);
-        }
-
-
         for(int i=0; i < statesBKP.size(); i++) {
             MState currState = statesBKP.get(i);
-            //MState currState = (MState) dfa.addState(_currState.getName(), _currState.isFinal());
+
+            if(currState.equals(targetVazio))
+                continue;
 
             for (Character symbol : symbols) {
-                /*
-                //passa as transicoes de _currState para currState do DFA
-                if(_currState.getCompoundState().size() > 0) {
-                    currState = _currState;
-                }else if(_currState.getTransitions().containsKey(symbol)) {
-                    List<MState> list = _currState.getTransitions().get(symbol);
-                    for(MState s:list)
-                        currState.addTransition(symbol, s);
-                }*/
 
                 //Caso for estado inicial
                 if (currState.getName().equals(this.startState.getName()))
                     dfa.setStart(currState);
 
                 List<MState> targets = currState.getTransitions().get(symbol);
-                if(targets == null){
+                if(targets == null || targets.size() == 0){
                     if(!statesBKP.contains(targetVazio)){
                         statesBKP.add(targetVazio);
                     }
@@ -107,17 +98,14 @@ public class NFAImpl implements NFA {
 
                     currState.addTransition(symbol, newState);
                 }else if(targets.size() == 1){
-                    if(targets.get(0) == targetVazio){
-                        targets.clear();
-                        currState.addTransition(symbol, targetVazio);
-                    }else{
+                    if(!targets.get(0).getName().equals(targetVazio.getName())){
                         currState.addTransition(symbol, targets.get(0));
                     }
                 }
             }
         }
 
-        //TODO: adicionar os statesBKP na lista de states do DFA
+
         dfa.setStates(statesBKP);
         return dfa;
     }
@@ -155,6 +143,7 @@ public class NFAImpl implements NFA {
             for(MState state: states){
                 if(state.getTransitions().containsKey(symbol)){
                     List<MState> tmpTargets = state.getTransitions().get(symbol);
+
                     for (MState t : tmpTargets) {
                         newState.addTransition(symbol, t);
                     }
@@ -163,9 +152,16 @@ public class NFAImpl implements NFA {
         }
 
 
+
+
         for(Character symbol: symbols){
-            if(newState.getTransitions().get(symbol).containsAll(states) && newState.getTransitions().get(symbol).size() == states.size()) {
-                newState.getTransitions().get(symbol).clear();
+            List<MState> tar = newState.getTransitions().get(symbol);
+            if(tar != null && tar.size() > 1){
+                tar.remove(targetVazio);
+            }
+
+            if(tar != null && tar.containsAll(states) && tar.size() == states.size()) {
+                tar.clear();
                 newState.addTransition(symbol, newState);
             }
         }
@@ -183,6 +179,20 @@ public class NFAImpl implements NFA {
             }
         }
         return null;
+    }
+
+
+    private MState targetVazioFactory(String stateName){
+        //Criar target vazio e quando ler qualquer simbolo apondar para ele mesmo
+        MState targetVazio = new MState(stateName, false);
+        for(Character symbol: symbols) {
+            targetVazio.addTransition(symbol, targetVazio);
+        }
+
+        //adiciona transicao para Epsilon
+        targetVazio.addTransition(this.Epsilon, targetVazio);
+
+        return targetVazio;
     }
 
 }

@@ -15,7 +15,7 @@ import static org.junit.Assert.assertTrue;
 public class NonDeterministicTests {
 
 
-    /*
+
     private void shouldAcceptNFALanguage(String word) {
         NFA automata = AutomataFactory.createNFA();
 
@@ -46,27 +46,10 @@ public class NonDeterministicTests {
 
         assertTrue(automata.accept(word));
     }
-    */
-
-
 
 
     private void shouldAcceptNFALanguage2(String word) {
         NFA automata = AutomataFactory.createNFA();
-
-        /*
-        automata.getSymbols().addAll(Arrays.asList('0', '1'));
-
-        State s0 = automata.addState("S0");
-        State s1 = automata.addState("S1");
-        State s2 = automata.addState("S2", true);
-
-        automata.setStart(s0);
-
-        automata.addTransition(s0, '0', s0);
-        automata.addTransition(s0, '1', s0, s1);
-        automata.addTransition(s1, '0', s2);
-        */
 
         automata.getSymbols().addAll(Arrays.asList('0', '1'));
 
@@ -78,7 +61,7 @@ public class NonDeterministicTests {
         automata.addTransition(s0, '0', s0, s1);
         automata.addTransition(s0, '1', s1);
         automata.addTransition(s1, '0', s0);
-        //automata.addTransition(s1, '1', s0);
+        automata.addTransition(s1, '1', s0);
 
 
         assertTrue(automata.accept(word));
@@ -86,14 +69,14 @@ public class NonDeterministicTests {
 
     @Test
     public void test1() {
-        shouldAcceptNFALanguage2("100");
+        shouldAcceptNFALanguage2("1000");
     }
-    /*
+/*
     @Test
     public void test2() {
         shouldAcceptNFALanguage("def");
     }
-
+*/
     private void shouldNotAcceptNFALanguage(String word) {
         NFA automata = AutomataFactory.createNFA();
 
@@ -185,24 +168,27 @@ public class NonDeterministicTests {
         shouldAcceptNFALanguage1("c");
     }
 
+
     @Test
     public void test24() {
         shouldAcceptNFALanguage1("ac");
     }
-
+    /*
     @Test
     public void test25() {
+        //TODO: ajustar para as transicoes vazias Epsilon
         shouldAcceptNFALanguage1("b");
     }
-
+*/
     @Test
     public void test26() {
         shouldAcceptNFALanguage1("cc");
     }
-
+/*
     @Test
     public void test27() {
+        //TODO: ajustar para as transicoes vazias Epsilon
         shouldAcceptNFALanguage1("abc");
     }
-        */
+*/
 }
