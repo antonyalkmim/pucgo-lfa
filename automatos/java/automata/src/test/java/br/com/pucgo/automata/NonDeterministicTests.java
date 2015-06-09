@@ -78,7 +78,7 @@ public class NonDeterministicTests {
         automata.addTransition(s0, '0', s0, s1);
         automata.addTransition(s0, '1', s1);
         automata.addTransition(s1, '0', s0);
-        automata.addTransition(s1, '1', s0);
+        //automata.addTransition(s1, '1', s0);
 
 
         assertTrue(automata.accept(word));
@@ -86,7 +86,7 @@ public class NonDeterministicTests {
 
     @Test
     public void test1() {
-        shouldAcceptNFALanguage2("010");
+        shouldAcceptNFALanguage2("100");
     }
     /*
     @Test

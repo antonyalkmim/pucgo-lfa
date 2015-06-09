@@ -57,17 +57,13 @@ public class NFAImpl implements NFA {
         return this.toDFA().accept(word);
     }
 
-    public void addStates(List<MState> s) {
-
-    }
-
 
     public DFA toDFA() {
 
         List<MState> statesBKP = new ArrayList<MState>();
         statesBKP.addAll(states);
 
-        DFA dfa = AutomataFactory.createDFA();
+        DFAImpl dfa = new DFAImpl();
         dfa.getSymbols().addAll(this.symbols);
 
 
@@ -111,20 +107,22 @@ public class NFAImpl implements NFA {
 
                     currState.addTransition(symbol, newState);
                 }else if(targets.size() == 1){
-
-                    if(currState.getTransitions().get(symbol) != null && currState.getTransitions().get(symbol).get(0) == targetVazio){
-                        currState.getTransitions().get(symbol).clear();
+                    if(targets.get(0) == targetVazio){
+                        targets.clear();
+                        currState.addTransition(symbol, targetVazio);
+                    }else{
+                        currState.addTransition(symbol, targets.get(0));
                     }
-
-                    currState.addTransition(symbol, targets.get(0));
                 }
             }
         }
 
         //TODO: adicionar os statesBKP na lista de states do DFA
-        dfa.addStates(statesBKP);
+        dfa.setStates(statesBKP);
         return dfa;
     }
+
+
 
 
     private MState stateFromStates(List<MState> states){
@@ -177,14 +175,6 @@ public class NFAImpl implements NFA {
         return newState;
     }
 
-    private MState verificaState(List<MState> states, List<MState> targetStates){
-
-        for(MState state: states){
-
-        }
-
-        return null;
-    }
 
     private MState existStateName(String stateName){
         for(MState state: states){

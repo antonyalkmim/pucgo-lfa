@@ -67,7 +67,4 @@ public interface Automata {
      */
     public boolean accept(String word);
 
-
-    public void addStates(List<MState> s);
-
 }
