@@ -1,11 +1,9 @@
 package br.com.pucgo.automata.impl;
 
-import br.com.pucgo.automata.AutomataFactory;
 import br.com.pucgo.automata.DFA;
 import br.com.pucgo.automata.NFA;
 import br.com.pucgo.automata.State;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 

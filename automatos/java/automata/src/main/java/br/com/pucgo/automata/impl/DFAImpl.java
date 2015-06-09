@@ -8,7 +8,6 @@ import java.util.*;
 
 public class DFAImpl implements DFA {
 
-
     //Lista de estados
     public List<MState> states = new ArrayList<MState>();
 
