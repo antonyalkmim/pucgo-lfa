@@ -47,6 +47,11 @@ public class NonDeterministicTests {
         assertTrue(automata.accept(word));
     }
 
+    @Test
+    public void test2() {
+        //TODO: ajustar para as transicoes vazias Epsilon
+        shouldAcceptNFALanguage("def");
+    }
 
     private void shouldAcceptNFALanguage2(String word) {
         NFA automata = AutomataFactory.createNFA();
@@ -71,12 +76,7 @@ public class NonDeterministicTests {
     public void test1() {
         shouldAcceptNFALanguage2("1000");
     }
-/*
-    @Test
-    public void test2() {
-        shouldAcceptNFALanguage("def");
-    }
-*/
+
     private void shouldNotAcceptNFALanguage(String word) {
         NFA automata = AutomataFactory.createNFA();
 
@@ -173,22 +173,22 @@ public class NonDeterministicTests {
     public void test24() {
         shouldAcceptNFALanguage1("ac");
     }
-    /*
+
     @Test
     public void test25() {
         //TODO: ajustar para as transicoes vazias Epsilon
         shouldAcceptNFALanguage1("b");
     }
-*/
+
     @Test
     public void test26() {
         shouldAcceptNFALanguage1("cc");
     }
-/*
+
     @Test
     public void test27() {
         //TODO: ajustar para as transicoes vazias Epsilon
         shouldAcceptNFALanguage1("abc");
     }
-*/
+
 }
