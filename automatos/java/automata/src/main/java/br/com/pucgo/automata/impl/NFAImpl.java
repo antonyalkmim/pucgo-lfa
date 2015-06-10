@@ -251,21 +251,46 @@ public class NFAImpl implements NFA {
         *   => Adicionar os targets de Epsilon para todos os outros simbolos do alfabeto
         *   => Remover transicoes Epsilon
         **/
-        for(MState state: states){
-           if(state.getTransitions().containsKey(NFAImpl.Epsilon)){
-               List<MState> targets = state.getTransitions().get(NFAImpl.Epsilon);
-               for(MState target:targets){
-                   for(Character symbol: symbols){
-                       state.addTransition(symbol, target);
-                   }
-                   target.getTransitions().remove(this.getEpsilon());
-               }
-           }
-        }
+        while(statesContainsEpsilonTransitions(states)) {
+            for (MState state : states) {
+                if (state.getTransitions().containsKey(NFAImpl.Epsilon)) {
+                    //Targets para Epsilon
+                    List<MState> targets = state.getTransitions().get(NFAImpl.Epsilon);
+                    state.getTransitions().remove(NFAImpl.Epsilon);
 
+                    for (MState target : targets) {
+                        for (Character symbol : symbols) {
+                            state.addTransition(symbol, target);
+                            List<MState> tmp = target.getTransitions().get(symbol);
+                            if (tmp != null && tmp.size() > 0) {
+                                state.getTransitions().get(symbol).addAll(target.getTransitions().get(symbol));
+                            }
+                        }
+
+
+                    }
+
+                    
+
+                }
+            }
+        }
         //Remove o Epsilon do alfabeto para nao interferir na conversao
         this.symbols.remove((Character) this.getEpsilon());
 
+    }
+
+    /**
+     * Verifica se algum estado da lista possui transicoes epsilon
+     * @param states
+     * @return boolean
+     */
+    private boolean statesContainsEpsilonTransitions(List<MState> states){
+        for(MState state : states){
+            if(state.getTransitions().containsKey(this.getEpsilon()))
+                return true;
+        }
+        return false;
     }
 
     /**

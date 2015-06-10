@@ -19,7 +19,7 @@ public class NonDeterministicTests {
     private void shouldAcceptNFALanguage(String word) {
         NFA automata = AutomataFactory.createNFA();
 
-        automata.getSymbols().addAll(Arrays.asList('a', 'b', 'c'));
+        automata.getSymbols().addAll(Arrays.asList('a', 'b', 'c', 'd', 'e', 'f'));
 
         State s0 = automata.addState("S0");
         State s1 = automata.addState("S1");
@@ -52,7 +52,7 @@ public class NonDeterministicTests {
         //TODO: ajustar para as transicoes vazias Epsilon
         shouldAcceptNFALanguage("def");
     }
-
+/*
     private void shouldAcceptNFALanguage2(String word) {
         NFA automata = AutomataFactory.createNFA();
 
@@ -188,5 +188,5 @@ public class NonDeterministicTests {
     public void test27() {
         shouldAcceptNFALanguage1("abc");
     }
-
+*/
 }
