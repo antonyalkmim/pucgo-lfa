@@ -253,25 +253,24 @@ public class NFAImpl implements NFA {
         **/
         while(statesContainsEpsilonTransitions(states)) {
             for (MState state : states) {
-                if (state.getTransitions().containsKey(NFAImpl.Epsilon)) {
+                if (state.getTransitions().containsKey(this.getEpsilon())) {
                     //Targets para Epsilon
-                    List<MState> targets = state.getTransitions().get(NFAImpl.Epsilon);
-                    state.getTransitions().remove(NFAImpl.Epsilon);
+                    List<MState> targets = state.getTransitions().get(this.getEpsilon());
 
+                    //TODO: Erro quando tem duas transicoes Epsilon seguidas
                     for (MState target : targets) {
                         for (Character symbol : symbols) {
                             state.addTransition(symbol, target);
                             List<MState> tmp = target.getTransitions().get(symbol);
                             if (tmp != null && tmp.size() > 0) {
-                                state.getTransitions().get(symbol).addAll(target.getTransitions().get(symbol));
+                                for(MState t:tmp)
+                                    state.addTransition(symbol, t);
+                                //state.getTransitions().get(symbol).addAll(target.getTransitions().get(symbol));
                             }
                         }
-
-
                     }
 
-                    
-
+                    state.getTransitions().remove(this.getEpsilon());
                 }
             }
         }

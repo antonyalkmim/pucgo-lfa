@@ -15,7 +15,7 @@ import static org.junit.Assert.assertTrue;
 public class NonDeterministicTests {
 
 
-
+/*
     private void shouldAcceptNFALanguage(String word) {
         NFA automata = AutomataFactory.createNFA();
 
@@ -49,13 +49,13 @@ public class NonDeterministicTests {
 
     @Test
     public void test2() {
-        //TODO: ajustar para as transicoes vazias Epsilon
         shouldAcceptNFALanguage("def");
     }
-/*
+*/
     private void shouldAcceptNFALanguage2(String word) {
         NFA automata = AutomataFactory.createNFA();
 
+        /*
         automata.getSymbols().addAll(Arrays.asList('0', '1'));
 
         State s0 = automata.addState("S0");
@@ -67,16 +67,28 @@ public class NonDeterministicTests {
         automata.addTransition(s0, '1', s1);
         automata.addTransition(s1, '0', s0);
         automata.addTransition(s1, '1', s0);
+        */
 
+        automata.getSymbols().addAll(Arrays.asList('0'));
+
+        State s0 = automata.addState("S0");
+        State s1 = automata.addState("S1");
+        State s2 = automata.addState("S2", true);
+
+        automata.setStart(s0);
+
+        automata.addTransition(s0, '0', s1);
+        automata.addTransition(s0, automata.getEpsilon(), s2);
+        automata.addTransition(s2, automata.getEpsilon(), s1);
 
         assertTrue(automata.accept(word));
     }
 
     @Test
     public void test1() {
-        shouldAcceptNFALanguage2("1000");
+        shouldAcceptNFALanguage2("0");
     }
-
+    /*
     private void shouldNotAcceptNFALanguage(String word) {
         NFA automata = AutomataFactory.createNFA();
 
@@ -188,5 +200,5 @@ public class NonDeterministicTests {
     public void test27() {
         shouldAcceptNFALanguage1("abc");
     }
-*/
+    */
 }
