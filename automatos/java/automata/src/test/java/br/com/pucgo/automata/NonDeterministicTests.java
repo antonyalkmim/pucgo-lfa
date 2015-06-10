@@ -176,7 +176,6 @@ public class NonDeterministicTests {
 
     @Test
     public void test25() {
-        //TODO: ajustar para as transicoes vazias Epsilon
         shouldAcceptNFALanguage1("b");
     }
 
@@ -187,7 +186,6 @@ public class NonDeterministicTests {
 
     @Test
     public void test27() {
-        //TODO: ajustar para as transicoes vazias Epsilon
         shouldAcceptNFALanguage1("abc");
     }
 

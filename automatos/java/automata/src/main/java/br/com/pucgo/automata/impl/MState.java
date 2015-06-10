@@ -67,4 +67,12 @@ public class MState extends State {
         return this.transitions;
     }
 
+    /**
+     * Retorna a lista de estados que compoe o estado
+     * @return List<MState>
+     */
+    public List<MState> getCompoundState(){
+        return this.compoundState;
+    }
+
 }

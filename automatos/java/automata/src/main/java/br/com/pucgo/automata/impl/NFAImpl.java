@@ -74,6 +74,9 @@ public class NFAImpl implements NFA {
         List<MState> statesBKP = new ArrayList<MState>();
         statesBKP.addAll(states);
 
+        //remove transicoes epsilon
+        preProcessTransitions(statesBKP);
+
         DFAImpl dfa = new DFAImpl();
         dfa.getSymbols().addAll(this.symbols);
 
@@ -170,7 +173,14 @@ public class NFAImpl implements NFA {
             newStateName += state.getName();
             newStateIsFinal = newStateIsFinal ? newStateIsFinal : state.isFinal();
         }
-        MState newState = new MState(newStateName, newStateIsFinal, states);
+
+        MState newState = getStateByCompoundState(states, dfaStates);
+        //verifica se o novo estado ja foi criado anteriormente
+        if(newState != null) {
+            return newState;
+        }
+
+        newState = new MState(newStateName, newStateIsFinal, states);
 
         //Adiciona as transicoes dos filhos na lista de transicoes do newState
         for(Character symbol: symbols) {
@@ -224,6 +234,58 @@ public class NFAImpl implements NFA {
 
         return targetVazio;
     }
+
+    /**
+     * Pre-processa as transicoes removendo as transicoes Epsilon
+     * @param states List<MState>
+     */
+    private void preProcessTransitions(List<MState> states){
+        //TODO: remover todos os estados inalcançaveis
+
+        //Nao e necessario processar quando nao tiver transicoes Epsilon
+        if(!this.symbols.contains(NFAImpl.Epsilon))
+            return;
+
+        /*
+        * Para cada estado que tiver transicoes Epsilon:
+        *   => Adicionar os targets de Epsilon para todos os outros simbolos do alfabeto
+        *   => Remover transicoes Epsilon
+        **/
+        for(MState state: states){
+           if(state.getTransitions().containsKey(NFAImpl.Epsilon)){
+               List<MState> targets = state.getTransitions().get(NFAImpl.Epsilon);
+               for(MState target:targets){
+                   for(Character symbol: symbols){
+                       state.addTransition(symbol, target);
+                   }
+                   target.getTransitions().remove(this.getEpsilon());
+               }
+           }
+        }
+
+        //Remove o Epsilon do alfabeto para nao interferir na conversao
+        this.symbols.remove((Character) this.getEpsilon());
+
+    }
+
+    /**
+     * Busca um estado composto atraves da lista de estados que o compoe
+     * @param compound Lista que compoe o estado a ser buscado
+     * @param statesList Lista de estados
+     * @return Retorna estado encontrado ou null caso nao for encontrado
+     */
+    private MState getStateByCompoundState(List<MState> compound, List<MState> statesList){
+
+        for(MState state:statesList){
+            List<MState> comp = state.getCompoundState();
+
+            if(comp != null && comp.containsAll(compound) && comp.size() == compound.size()) {
+                return state;
+            }
+        }
+        return null;
+    }
+
 
 }
 
