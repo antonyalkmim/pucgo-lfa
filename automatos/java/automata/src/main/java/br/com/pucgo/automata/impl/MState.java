@@ -10,6 +10,8 @@ import java.util.*;
 
 public class MState extends State implements Cloneable {
 
+    private boolean isFinal;
+
     //Armazena os estados que compoem este estado(Quando for criado a partir de uma lista de estados)
     private List<MState> compoundState = new ArrayList<MState>();
 
@@ -18,10 +20,12 @@ public class MState extends State implements Cloneable {
 
     public MState(String name) {
         super(name);
+        this.isFinal = false;
     }
 
     public MState(String name, boolean isFinal) {
         super(name, isFinal);
+        this.isFinal = isFinal;
     }
 
     /**
@@ -32,6 +36,7 @@ public class MState extends State implements Cloneable {
      */
     public MState(String name, boolean isFinal, List<MState> compoundState) {
         super(name, isFinal);
+        this.isFinal = isFinal;
         this.compoundState.addAll(compoundState);
     }
 
@@ -77,6 +82,15 @@ public class MState extends State implements Cloneable {
         cloned.getTransitions().putAll((this.getTransitions()));
 
         return null;
+    }
+
+    @Override
+    public boolean isFinal(){
+        return this.isFinal;
+    }
+
+    public void setIsFinal(boolean isFinal){
+        this.isFinal = isFinal;
     }
 
 }

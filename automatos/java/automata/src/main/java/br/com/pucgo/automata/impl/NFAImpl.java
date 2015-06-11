@@ -260,9 +260,6 @@ public class NFAImpl implements NFA {
 
                     state.getTransitions().remove(this.getEpsilon());
 
-                    //flag que indica se deve ser criado um novo estado como final
-                    boolean isSetFinal = false;
-
                     for (MState target : targets) {
                         for (Character symbol : symbols) {
                             state.addTransition(symbol, target);
@@ -273,16 +270,19 @@ public class NFAImpl implements NFA {
                             }
                         }
 
+                        //Se algum dos targets forem final, entao o state deve ser final
                         if(target.isFinal())
-                            isSetFinal = true;
+                            state.setIsFinal(true);
                     }
 
-                    //
+                    /*
+                        Se houver transicoes epsilon entao
+                        remove os targets que ja foram processados para nao cair em loop infinito
+                     */
                     if(state.getTransitions().containsKey(this.getEpsilon()))
                         state.getTransitions().get(this.getEpsilon()).removeAll(targets);
 
-                    if(isSetFinal)
-                        state = state.clonar(true);
+
                 }
             }
         }
