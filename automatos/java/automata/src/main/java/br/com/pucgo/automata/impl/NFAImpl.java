@@ -255,9 +255,14 @@ public class NFAImpl implements NFA {
             for (MState state : states) {
                 if (state.getTransitions().containsKey(this.getEpsilon())) {
                     //Targets para Epsilon
-                    List<MState> targets = state.getTransitions().get(this.getEpsilon());
+                    List<MState> targets = new ArrayList<MState>();
+                    targets.addAll(state.getTransitions().get(this.getEpsilon()));
 
-                    //TODO: Erro quando tem duas transicoes Epsilon seguidas
+                    state.getTransitions().remove(this.getEpsilon());
+
+                    //flag que indica se deve ser criado um novo estado como final
+                    boolean isSetFinal = false;
+
                     for (MState target : targets) {
                         for (Character symbol : symbols) {
                             state.addTransition(symbol, target);
@@ -265,12 +270,19 @@ public class NFAImpl implements NFA {
                             if (tmp != null && tmp.size() > 0) {
                                 for(MState t:tmp)
                                     state.addTransition(symbol, t);
-                                //state.getTransitions().get(symbol).addAll(target.getTransitions().get(symbol));
                             }
                         }
+
+                        if(target.isFinal())
+                            isSetFinal = true;
                     }
 
-                    state.getTransitions().remove(this.getEpsilon());
+                    //
+                    if(state.getTransitions().containsKey(this.getEpsilon()))
+                        state.getTransitions().get(this.getEpsilon()).removeAll(targets);
+
+                    if(isSetFinal)
+                        state = state.clonar(true);
                 }
             }
         }

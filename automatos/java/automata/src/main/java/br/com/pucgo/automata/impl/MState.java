@@ -6,12 +6,9 @@ package br.com.pucgo.automata.impl;
 
 import br.com.pucgo.automata.State;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class MState extends State {
+public class MState extends State implements Cloneable {
 
     //Armazena os estados que compoem este estado(Quando for criado a partir de uma lista de estados)
     private List<MState> compoundState = new ArrayList<MState>();
@@ -73,6 +70,13 @@ public class MState extends State {
      */
     public List<MState> getCompoundState(){
         return this.compoundState;
+    }
+
+    public MState clonar(boolean isFinal) {
+        MState cloned = new MState(this.getName(), isFinal);
+        cloned.getTransitions().putAll((this.getTransitions()));
+
+        return null;
     }
 
 }
