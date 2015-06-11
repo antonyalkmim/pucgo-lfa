@@ -84,11 +84,19 @@ public class MState extends State implements Cloneable {
         return null;
     }
 
+    /**
+     * Retorna se estado e final
+     * @return
+     */
     @Override
     public boolean isFinal(){
         return this.isFinal;
     }
 
+    /**
+     * Seta o estado como final
+     * @param isFinal
+     */
     public void setIsFinal(boolean isFinal){
         this.isFinal = isFinal;
     }

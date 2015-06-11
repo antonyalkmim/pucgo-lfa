@@ -75,7 +75,7 @@ public class NFAImpl implements NFA {
         statesBKP.addAll(states);
 
         //remove transicoes epsilon
-        preProcessTransitions(statesBKP);
+        removeEpsilonTransitions(statesBKP);
 
         DFAImpl dfa = new DFAImpl();
         dfa.getSymbols().addAll(this.symbols);
@@ -165,6 +165,9 @@ public class NFAImpl implements NFA {
      * @return
      */
     private MState stateFromStates(List<MState> states, List<MState> dfaStates){
+        //Formata estados compostos
+        states = preProcessCompoundStates(states);
+
         String newStateName = "";
         boolean newStateIsFinal = false;
 
@@ -179,7 +182,7 @@ public class NFAImpl implements NFA {
         if(newState != null) {
             return newState;
         }
-
+        //cria novo estado
         newState = new MState(newStateName, newStateIsFinal, states);
 
         //Adiciona as transicoes dos filhos na lista de transicoes do newState
@@ -218,6 +221,30 @@ public class NFAImpl implements NFA {
 
 
     /**
+     * Pre processa uma lista de estados que criara um novo estado
+     * ex: [S0S1, S2] retorna [S0,S1,S2]
+     * @param states List
+     * @return List
+     */
+    private List<MState> preProcessCompoundStates (List<MState> states){
+        List<MState> tmp = new ArrayList<MState>();
+
+        for(MState state: states){
+            List<MState> compound = state.getCompoundState();
+            if(compound != null && compound.size() > 0) {
+                for (MState comp : compound) {
+                    if (!tmp.contains(comp))
+                        tmp.add(comp);
+                }
+            }else{
+                if (!tmp.contains(state))
+                    tmp.add(state);
+            }
+        }
+        return tmp;
+    }
+
+    /**
      * Fabrica de targetVazio
      * @param stateName
      * @return MState
@@ -239,7 +266,7 @@ public class NFAImpl implements NFA {
      * Pre-processa as transicoes removendo as transicoes Epsilon
      * @param states List<MState>
      */
-    private void preProcessTransitions(List<MState> states){
+    private void removeEpsilonTransitions(List<MState> states){
         //TODO: remover todos os estados inalcançaveis
 
         //Nao e necessario processar quando nao tiver transicoes Epsilon
