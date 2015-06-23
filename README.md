@@ -1,3 +1,3 @@
-#Issue
-Problemas no toDFA quando o automato possui duas transicoes Epsilon Seguidas.
-Ajustar uma forma para um possivel metodo `setFinal()` no MState.
+#NFA e DFA
+Implementação do Autômato Finito Determinístico(DFA) e Autômato Finito Não Deterministico (NFA).
+
